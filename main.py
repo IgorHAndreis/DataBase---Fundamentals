@@ -86,12 +86,56 @@ def login():
     senha =  input("digite a senha \n")
     contas.Gerenciamento_Contas().login(email, senha)
 
-def register():
-    nome  =  input("digite o nome\n")
-    email =  input("digite o email \n")
-    senha =  input("digite a senha \n")
-    desc  = input("insira uma breve descricao sua \n")
-    foto =  "link foto"
+def register(conn):
+    
+    gerenciador = contas.Gerenciamento_Contas(conn)
+    
+    tipo_opcao = input("Tipo de conta: 1 - pessoal 2 - empresarial: ")
+    
+    if tipo_opcao == "1":
+        tipo = "pessoal"
+    elif tipo_opcao == "2":
+        tipo = "empresarial"
+    else:
+        print("Opção inválida para tipo de conta!")
+        return None
+    
+    data = {"tipo": tipo}
+    
+    data["name"] = input("Nome: ")
+    data["email"] = input("Email: ")
+    data["password"] = input("Senha: ")
+    data["foto_perfil"] = input("Foto de perfil (ou deixe vazio): ") or None
+    data["banner"] = input("Banner (ou deixe vazio): ") or None
+    data["sobre"] = input("Sobre: ")
+    
+    if tipo == "pessoal":
+        data["titulo"] = input("Título: ")
+
+    elif tipo == "empresarial":
+        
+        data["nome_fantasia"] = input("Nome fantasia: ")
+        data["localizacao"] = input("Localização: ")
+        
+        print("\nSetores disponíveis:")
+        setores = gerenciador.listar_setores()
+
+        for setor in setores:
+            print(f"{setor[0]} - {setor[1]}")
+
+        data["setor"] = int(input("Digite o ID do setor: "))
+                
+        data["cod_institucional"] = input("Código institucional: ") or None
+
+    conta = gerenciador.criar_conta(data)
+    
+    if conta:
+        print("Conta criada com sucesso!")
+        print(conta)
+        return conta
+    
+    return None
+    
 
 def select_or_insert(conn):
     inp =  input("o que deseja fazer? \n 1.Consultar \n 2.Criar \n")
@@ -109,7 +153,7 @@ def main():
         case 1:
             select_or_insert(conn)
         case 2:
-            register()
+            register(conn)
         case -1:
             stop = True
 

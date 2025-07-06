@@ -60,6 +60,12 @@ class Gerenciamento_Contas:
     def __init__(self,conexao):
         self.conexao = conexao
         
+    def listar_setores(self):
+        with self.conexao.cursor() as cursor:
+            cursor.execute("SELECT id, nome FROM setor ORDER BY id;")
+            setores = cursor.fetchall()
+            return setores
+        
     
     def login(self, user, password) -> Conta:
         

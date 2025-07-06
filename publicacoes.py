@@ -1,8 +1,6 @@
 import psycopg2
 from datetime import datetime
 
-# Em processo de criacao 
-
 class Publicacao:
 
     def __init__(self, id: int, id_autor: int, texto_conteudo: str, anexo: str = None):
