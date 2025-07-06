@@ -21,12 +21,12 @@ def  Consultas_menu(conn: psycopg2.extensions.connection, userData ):
           3. Listar perfis que preenchem uma vaga específica
           4. Listar pessoas que estudaram na universidade x e trabalham na empresa y
           5. listar perfis candidatos a vaga x, mas sem o certificado desejado
-          6. listar instituições de ensino que formaram mais de 5 alunos no ano desejado
+          6. listar instituições de ensino que formaram mais de x alunos no ano desejado
           e atualmente contém um título da tua escolha (exemplo: gerente)
           7. Listar as vagas que suas conexões se candidataram.
           8. Instituições de ensino com mais formandos contratados
           9. quantidade de curtidas e comentários feitas por cada integrante de um grupo.
-          10. vagas abertas em uma empresa da sua escolha, com uma modalidade de sua escolha.
+          10. vagas  ou fechadas em uma empresa da sua escolha, com uma modalidade de sua escolha.
           selecione um:
             """)
     Query_map =  globals.Query_map
@@ -41,42 +41,44 @@ def  Consultas_menu(conn: psycopg2.extensions.connection, userData ):
             vaga_id =  input("insira o id de uma vaga (exemplo, 1) \n")
             res = cdb.select_handler(conn, Query_map[inp], vaga_id)
         case '4':
-            args = []
+            university =  input("digite o id de uma universidade")
+            empresa =  input("digite o id de uma empresa")
+            args = [university, empresa]
             clear_terminal()
             res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
         case '5':
-            args = []
+            vaga_id =  input("insira o id de uma vaga (exemplo, 1) \n")
+            args = [vaga_id]
             clear_terminal()
             res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
         case '6':
-            args = []
+            yr = input("insira um ano\n")
+            title =  input("insira título\n")
+            title = "%" + title + "%"
+            counting =  input("quantos deseja saber? \n")
             clear_terminal()
+            args = [yr, title, counting]
             res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
         case '7':
-            args = []
-            clear_terminal()
+            args = [userData.id, userData.id]
             res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
         case '8':
             args = []
-            clear_terminal()
             res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
         case '9':
-            args = []
+            group_id = input("insira o id de um grupo válido")
+            args = [group_id]
             clear_terminal()
             res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
         case '10':
-            args = []
+            status =  input("insira um status (Aberta ou Fechada)")
+            empresa =  input("insira o id de uma empresa")
+            modalidade =  input("insira uma modalidade (Híbrido, Remoto, ou Presencial)\n")
+            args = [empresa, modalidade, status]
             clear_terminal()
             res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
         case _:
-            pass
+            select_or_insert(conn, userData)
     pprint.pprint(res)
     wait= False
     input("aperte qualquer coisa para sair")
