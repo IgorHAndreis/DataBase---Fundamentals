@@ -88,7 +88,6 @@ class Gerenciamento_Contas:
                         foto_perfil=foto_perfil, banner=banner, sobre=sobre
                     )
 
-                # Verifica se é perfil empresarial
                 cursor.execute("""
                     SELECT NomeFantasia, Localizacao, ID_setor, Cod_institucional
                     FROM perfil_emp
@@ -113,7 +112,7 @@ class Gerenciamento_Contas:
             return None
             
     
-    def criar_conta(self, data: dict):
+    def criar_conta(self, data: dict) -> Conta:
         
         nova_conta = self.gerar_conta(data)
         
@@ -121,9 +120,11 @@ class Gerenciamento_Contas:
             try:
                 nova_conta = self.insert_conta_banco(nova_conta)  
                 self.conexao.commit()
+                return nova_conta
             except (Exception, psycopg2.DatabaseError) as e:
                 self.conexao.rollback()
                 print(f"Falha ao inserir conta no banco de dados: {e}")
+                return None
     
     def insert_conta_banco(self, conta):
         
@@ -157,6 +158,8 @@ class Gerenciamento_Contas:
                     conta.id, conta.nome_fantasia, conta.localizacao,
                     conta.setor, conta.cod_institucional
                 ))
+                
+        return conta
                 
         
             

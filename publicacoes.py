@@ -56,10 +56,10 @@ class Gerenciamento_Publicacoes:
     
         try:
             nova_publicacao = Publicacao(
-                id=0,  # ID será gerado pelo banco de dados
+                id=0,  
                 id_autor=data['id_autor'],
                 texto_conteudo=data['texto_conteudo'],
-                anexo=data.get('anexo')  # .get() para campos opcionais
+                anexo=data.get('anexo')
             )
             return nova_publicacao
         except KeyError as e:

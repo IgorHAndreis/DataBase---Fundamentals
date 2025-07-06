@@ -2,6 +2,7 @@ import os
 import contas
 import createDb as cdb
 import psycopg2
+
 class conectar_banco:
     def __init__(self):
         self.conection = cdb.connect_db()
