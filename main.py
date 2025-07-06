@@ -4,6 +4,7 @@ import createDb as cdb
 import psycopg2
 import globals
 import pprint
+import publicacoes
 
 def clear_terminal():
     # Check if the operating system is Windows ('nt')
@@ -80,6 +81,32 @@ def  Consultas_menu(conn: psycopg2.extensions.connection, userData ):
     wait= False
     input("aperte qualquer coisa para sair")
     select_or_insert(conn, userData)
+    
+def criar_publicacao(conn,conta: contas.Conta, grupo_id: int = None):
+    
+    gerenciador = publicacoes.Gerenciamento_Publicacoes(conn)
+    
+    id_autor = conta.id
+    texto = input("Texto da publicação (até 500 caracteres): ")
+    anexo = input("Anexos (ou deixe vazio): ") or None
+    grupo_id = grupo_id
+    
+    dados_publicacao = {
+        "id_autor": id_autor,
+        "texto": texto,
+        "anexos": anexo,
+        "id_grupo": grupo_id
+    }
+    
+    publicacao =gerenciador.criar_publicacao(dados_publicacao)
+    
+    if publicacao:
+        print("Publicação criada com sucesso!")
+        print(f"ID da publicação: {publicacao.id}")
+        return publicacao
+    else:
+        print("Erro ao criar publicação.")
+        return None
 
 
 def insertMenu(conn:psycopg2.extensions.connection, userData):
