@@ -1,5 +1,8 @@
 import os
 import createDb as cdb
+import psycopg2
+
+
 def clear_terminal():
     # Check if the operating system is Windows ('nt')
     if os.name == 'nt':

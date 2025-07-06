@@ -59,6 +59,59 @@ class Gerenciamento_Contas:
     
     def __init__(self,conexao):
         self.conexao = conexao
+        
+    
+    def login(self, user, password) -> Conta:
+        
+        try:
+            with self.conexao.cursor() as cursor:
+                consulta = """
+                    SELECT * FROM contas
+                    WHERE email = %s AND senha = %s
+                """
+                cursor.execute(consulta, (user, password))
+                conta = cursor.fetchone()
+
+                if not conta:
+                    print("Usuário ou senha incorretos.")
+                    return None
+
+                conta_id, email, nome, senha, foto_perfil, banner, sobre = conta
+
+                cursor.execute("SELECT titulo FROM perfil_p WHERE cid = %s", (conta_id,))
+                perfil_p = cursor.fetchone()
+
+                if perfil_p:
+                    return Perfil_Pessoal(
+                        id=conta_id, name=nome, email=email, password=senha,
+                        titulo=perfil_p[0],
+                        foto_perfil=foto_perfil, banner=banner, sobre=sobre
+                    )
+
+                # Verifica se é perfil empresarial
+                cursor.execute("""
+                    SELECT NomeFantasia, Localizacao, ID_setor, Cod_institucional
+                    FROM perfil_emp
+                    WHERE cid = %s
+                """, (conta_id,))
+                perfil_emp = cursor.fetchone()
+
+                if perfil_emp:
+                    nome_fantasia, localizacao, setor, cod_institucional = perfil_emp
+                    return Perfil_Empresarial(
+                        id=conta_id, name=nome, email=email, password=senha,
+                        nome_fantasia=nome_fantasia, localizacao=localizacao,
+                        setor=setor, cod_institucional=cod_institucional,
+                        foto_perfil=foto_perfil, banner=banner, sobre=sobre
+                    )
+
+                print("Conta sem perfil vinculado.")
+                return None
+
+        except psycopg2.Error as e:
+            print("Erro ao acessar o banco de dados:", e)
+            return None
+            
     
     def criar_conta(self, data: dict):
         
