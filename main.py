@@ -3,7 +3,7 @@ import contas
 import createDb as cdb
 import psycopg2
 import globals
-
+import pprint
 
 def clear_terminal():
     # Check if the operating system is Windows ('nt')
@@ -13,64 +13,78 @@ def clear_terminal():
         _ = os.system('clear') # Use 'clear' for macOS/Linux
 
 # Call the function to clear the terminal
-def  Consultas_menu(conn: psycopg2.extensions.connection ):
-    inp =  int(input( "selecione qual consulta deseja fazer"))
+def  Consultas_menu(conn: psycopg2.extensions.connection, userData ):
+    inp =  input("""
+          1. O maior salário de cada setor
+          2. Nome de empresas seguidas por suas conexões
+          3. Listar perfis que preenchem uma vaga específica
+          4. Listar pessoas que estudaram na universidade x e trabalham na empresa y
+          5. listar perfis candidatos a vaga x, mas sem o certificado desejado
+          6. listar instituições de ensino que formaram mais de 5 alunos no ano desejado
+          e atualmente contém um título da tua escolha (exemplo: gerente)
+          7. Listar as vagas que suas conexões se candidataram.
+          8. Instituições de ensino com mais formandos contratados
+          9. quantidade de curtidas e comentários feitas por cada integrante de um grupo.
+          10. vagas abertas em uma empresa da sua escolha, com uma modalidade de sua escolha.
+          selecione um:
+            """)
     Query_map =  globals.Query_map
-    match inp:
-        case 1:
-            args = []
-            clear_terminal()
-            res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
-        case 2:
-            args = []
-            clear_terminal()
-            res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
-        case 3:
-            args = []
-            clear_terminal()
-            res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
-        case 4:
-            args = []
-            clear_terminal()
-            res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
-        case 5:
-            args = []
-            clear_terminal()
-            res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
-        case 6:
-            args = []
-            clear_terminal()
-            res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
-        case 7:
-            args = []
-            clear_terminal()
-            res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
-        case 8:
-            args = []
-            clear_terminal()
-            res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
-        case 9:
-            args = []
-            clear_terminal()
-            res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
-        case 10:
-            args = []
-            clear_terminal()
-            res = cdb.select_handler(conn, Query_map[inp], args)
-            print(res)
-
-def insertMenu(conn:psycopg2.extensions.connection):
     clear_terminal()
-    inp =  int(input("selecione uma opção"))
+    match inp:
+        case '1':
+            res = cdb.select_handler(conn, Query_map[inp])
+        case '2':
+            args = [str(userData.id), str(userData.id) ]
+            res = cdb.select_handler(conn, Query_map[inp], args)
+        case '3':
+            vaga_id =  input("insira o id de uma vaga (exemplo, 1) \n")
+            res = cdb.select_handler(conn, Query_map[inp], vaga_id)
+        case '4':
+            args = []
+            clear_terminal()
+            res = cdb.select_handler(conn, Query_map[inp], args)
+            print(res)
+        case '5':
+            args = []
+            clear_terminal()
+            res = cdb.select_handler(conn, Query_map[inp], args)
+            print(res)
+        case '6':
+            args = []
+            clear_terminal()
+            res = cdb.select_handler(conn, Query_map[inp], args)
+            print(res)
+        case '7':
+            args = []
+            clear_terminal()
+            res = cdb.select_handler(conn, Query_map[inp], args)
+            print(res)
+        case '8':
+            args = []
+            clear_terminal()
+            res = cdb.select_handler(conn, Query_map[inp], args)
+            print(res)
+        case '9':
+            args = []
+            clear_terminal()
+            res = cdb.select_handler(conn, Query_map[inp], args)
+            print(res)
+        case '10':
+            args = []
+            clear_terminal()
+            res = cdb.select_handler(conn, Query_map[inp], args)
+            print(res)
+        case _:
+            pass
+    pprint.pprint(res)
+    wait= False
+    input("aperte qualquer coisa para sair")
+    select_or_insert(conn, userData)
+
+
+def insertMenu(conn:psycopg2.extensions.connection, userData):
+    clear_terminal()
+    inp =  (input("selecione uma opção (qualquer outro pra sair)"))
     match inp:
         case 1: #grupo
             clear_terminal()
@@ -79,12 +93,16 @@ def insertMenu(conn:psycopg2.extensions.connection):
             clear_terminal()
             print("criar grupo")
             pass
+        case _: return
 
 
-def login():
+def login(conn):
+    clear_terminal()
     email =  input("digite o email \n")
     senha =  input("digite a senha \n")
-    contas.Gerenciamento_Contas().login(email, senha)
+    conta =  contas.Gerenciamento_Contas(conn)
+    res = conta.login(email, senha)
+    select_or_insert(conn, res)
 
 def register(conn):
     
@@ -137,24 +155,25 @@ def register(conn):
     return None
     
 
-def select_or_insert(conn):
+def select_or_insert(conn, userData):
+    clear_terminal()
     inp =  input("o que deseja fazer? \n 1.Consultar \n 2.Criar \n")
     match  inp:
-        case '1': Consultas_menu(conn)
-        case '2': insertMenu(conn)
+        case '1': Consultas_menu(conn, userData)
+        case '2': insertMenu(conn, userData)
 
 
 def main():
    stop  = False
    conn =  globals.connect_db()
    while not stop:
-    inp =  int(input("escolha um tipo \n 1.Log-in \n 2.Criar Conta\n-1.Stop \n"))
+    inp =  input("escolha um tipo \n 1.Log-in \n 2.Criar Conta\n- Qualquer outro para sair \n")
     match  inp:
-        case 1:
-            select_or_insert(conn)
-        case 2:
+        case '1':
+            login(conn)
+        case '2':
             register(conn)
-        case -1:
+        case _:
             stop = True
 
 main()
