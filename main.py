@@ -33,6 +33,7 @@ def register():
     email =  input("digite o email \n")
     senha =  input("digite a senha \n")
     desc  = input("insira uma breve descricao sua \n")
+    foto =  "link foto"
 
     
 
