@@ -20,7 +20,7 @@ stop  = False
 def main():
    conn = cdb.connect_db()
    while not stop:
-    inp =  int(input("escolha um tipo \n 1.Consultar \n 2.Inserir\n-1.Stop \n"))
+    inp =  int(input("escolha um tipo \n 1.Log-in \n 2.Criar Conta\n-1.Stop \n"))
     match  inp:
         case 1:
             searchMenu()
