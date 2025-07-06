@@ -113,7 +113,9 @@ def criar_publicacao(conn,conta: contas.Conta, grupo_id: int = None):
 
 def insertMenu(conn:psycopg2.extensions.connection, userData):
     clear_terminal()
-    inp =  (input("selecione uma opção (qualquer outro pra sair)"))
+    inp =  (input('''Selecione uma opção:
+1. Criar publicacao
+2. criar grupo'''))
     match inp:
         case 1: #grupo
             clear_terminal()
@@ -179,7 +181,7 @@ def register(conn):
     if conta:
         print("Conta criada com sucesso!")
         print(conta)
-        return conta
+        select_or_insert(conn, conta)
     
     return None
     
