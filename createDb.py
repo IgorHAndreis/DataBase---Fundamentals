@@ -1,15 +1,10 @@
 import psycopg2
 
-def connect_db():
-    # Connect to your postgres DB
-    conn = psycopg2.connect("host=localhost dbname=Linkado user=aplicacao password=senha123")
 
-# Open a cursor to perform database operations
+
+def select_handler(conn:psycopg2.extensions.connection, query, args: list = []):
     cur = conn.cursor()
-
-# Execute a query
-    cur.execute("SELECT * FROM contas")
-
-# Retrieve query results
+    cur.execute(query, args)
     records = cur.fetchall()
     return records
+
