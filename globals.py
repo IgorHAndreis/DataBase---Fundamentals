@@ -1,3 +1,9 @@
+import psycopg2
+def connect_db():
+    # Connect to your postgres DB
+        conn = psycopg2.connect("host=localhost dbname=Linkado user=aplicacao password=senha123")
+        return conn
+
 Query_map = {
     '1': '''
         SELECT
