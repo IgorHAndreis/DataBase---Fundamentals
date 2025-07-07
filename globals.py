@@ -126,7 +126,7 @@ Query_map = {
             Perfil_p pp ON ea.ID_pessoa = pp.CId
         WHERE
             EXTRACT(YEAR FROM ea.date_fim) = %s
-            AND pp.Titulo LIKE '% %s %'
+            AND pp.Titulo LIKE %s
         GROUP BY
             pe.NomeFantasia
         HAVING
