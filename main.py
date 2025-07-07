@@ -42,21 +42,21 @@ def  Consultas_menu(conn: psycopg2.extensions.connection, userData ):
             vaga_id =  input("insira o id de uma vaga (exemplo, 1) \n")
             res = cdb.select_handler(conn, Query_map[inp], vaga_id)
         case '4':
-            university =  input("digite o id de uma universidade")
-            empresa =  input("digite o id de uma empresa")
+            university =  input("digite o id de uma universidade: ")
+            empresa =  input("digite o id de uma empresa: ")
             args = [university, empresa]
             clear_terminal()
             res = cdb.select_handler(conn, Query_map[inp], args)
         case '5':
-            vaga_id =  input("insira o id de uma vaga (exemplo, 1) \n")
+            vaga_id =  input("insira o id de uma vaga (exemplo, 1):  \n")
             args = [vaga_id]
             clear_terminal()
             res = cdb.select_handler(conn, Query_map[inp], args)
         case '6':
-            yr = input("insira um ano\n")
-            title =  input("insira título\n")
+            yr = input("insira um ano: \n")
+            title =  input("insira título: \n")
             title = "%" + title + "%"
-            counting =  input("quantos deseja saber? \n")
+            counting =  input("quantos deseja saber?  \n")
             clear_terminal()
             args = [yr, title, counting]
             res = cdb.select_handler(conn, Query_map[inp], args)
@@ -67,14 +67,14 @@ def  Consultas_menu(conn: psycopg2.extensions.connection, userData ):
             args = []
             res = cdb.select_handler(conn, Query_map[inp], args)
         case '9':
-            group_id = input("insira o id de um grupo válido")
+            group_id = input("insira o id de um grupo válido: ")
             args = [group_id]
             clear_terminal()
             res = cdb.select_handler(conn, Query_map[inp], args)
         case '10':
-            status =  input("insira um status (Aberta ou Fechada)")
-            empresa =  input("insira o id de uma empresa")
-            modalidade =  input("insira uma modalidade (Híbrido, Remoto, ou Presencial)\n")
+            status =  input("insira um status (Aberta ou Fechada): ")
+            empresa =  input("insira o id de uma empresa: ")
+            modalidade =  input("insira uma modalidade (Híbrido, Remoto, ou Presencial): \n")
             args = [empresa, modalidade, status]
             clear_terminal()
             res = cdb.select_handler(conn, Query_map[inp], args)
