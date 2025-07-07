@@ -96,8 +96,8 @@ def criar_publicacao(conn,conta: contas.Conta, grupo_id: int = None):
     
     dados_publicacao = {
         "id_autor": id_autor,
-        "texto": texto,
-        "anexos": anexo,
+        "texto_conteudo": texto,
+        "anexo": anexo,
         "id_grupo": grupo_id
     }
     
@@ -113,15 +113,16 @@ def criar_publicacao(conn,conta: contas.Conta, grupo_id: int = None):
 
 
 def insertMenu(conn:psycopg2.extensions.connection, userData):
+    
     clear_terminal()
-    inp =  (input('''Selecione uma opção:
-1. Criar publicacao
-2. criar grupo'''))
+    inp =  (input("Selecione uma opção: \n 1. Criar publicacao \n 2. criar grupo \n"))
+    
     match inp:
-        case 1: #grupo
+        case '1': #grupo
             clear_terminal()
-            print("criar publi")
-        case 2:
+            print(inp)
+            criar_publicacao(conn=conn,conta=userData)
+        case '2':
             clear_terminal()
             print("criar grupo")
             pass
