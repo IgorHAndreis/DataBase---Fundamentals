@@ -210,5 +210,7 @@ def main():
             register(conn)
         case _:
             stop = True
+    
+    conn.close()
 
 main()
