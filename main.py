@@ -15,7 +15,6 @@ def clear_terminal():
 
 # Call the function to clear the terminal
 def  Consultas_menu(conn: psycopg2.extensions.connection, userData ):
-    print(userData)
     inp =  input("""
           1. O maior salário de cada setor
           2. Nome de empresas seguidas por suas conexões
@@ -115,7 +114,7 @@ def criar_publicacao(conn,conta: contas.Conta, grupo_id: int = None):
 def insertMenu(conn:psycopg2.extensions.connection, userData):
     
     clear_terminal()
-    inp =  (input("Selecione uma opção: \n 1. Criar publicacao \n 2. criar grupo \n"))
+    inp =  (input("Selecione uma opção: \n 1. Criar publicacao \n 2. listar grupos \n"))
     
     match inp:
         case '1': #grupo
@@ -123,10 +122,12 @@ def insertMenu(conn:psycopg2.extensions.connection, userData):
             print(inp)
             criar_publicacao(conn=conn,conta=userData)
         case '2':
-            clear_terminal()
-            print("criar grupo")
-            pass
+            query = "select nome, id from grupos"
+            res = cdb.select_handler(conn, query)
+            print(res)      
         case _: return
+    input(" digite qualquer coisa pra sair")
+    select_or_insert(conn, userData)
 
 
 def login(conn):
