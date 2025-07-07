@@ -15,6 +15,7 @@ def clear_terminal():
 
 # Call the function to clear the terminal
 def  Consultas_menu(conn: psycopg2.extensions.connection, userData ):
+    print(userData)
     inp =  input("""
           1. O maior salário de cada setor
           2. Nome de empresas seguidas por suas conexões
@@ -192,6 +193,7 @@ def select_or_insert(conn, userData):
     match  inp:
         case '1': Consultas_menu(conn, userData)
         case '2': insertMenu(conn, userData)
+        case _: return
 
 
 def main():
